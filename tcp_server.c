@@ -20,7 +20,7 @@ void func(int sockfd)
 
         //Le a mensagem do cliente e copia em um buffer
         read(sockfd, buff, sizeof(buff));
-        printf("From client: %s\t To client: ", buff);
+        printf("From client: %s\n\n To client: ", buff);
         bzero(buff, MAX);
         n = 0;
 
