@@ -10,10 +10,19 @@
 #define PORT     8080 
 #define MAXLINE 1024 
 
-int main() {
-    int sockfd;
+int main(int argc, char *argv[]) {
+    int sockfd, b;
     char buffer[MAXLINE];
-    char *hello = "Hello from client!";
+
+    FILE *fp = fopen(argv[1], "rb");
+
+    if(fp == NULL) {
+            perror("File");
+            return  1;
+    }
+
+    
+
     struct sockaddr_in servaddr;
 
     if ( (sockfd = socket(AF_INET, SOCK_DGRAM, 0)) < 0) {
@@ -29,9 +38,13 @@ int main() {
 
     int n, len;
 
-    sendto(sockfd, (const char *)hello, strlen(hello),
+    while( (b = fread(buffer, 1, sizeof(buffer), fp)) > 0) {
+             sendto(sockfd, buffer, strlen(buffer),
         MSG_CONFIRM, (const struct sockaddr *) &servaddr,
             sizeof(servaddr));
+        }
+
+   
     printf("Hello message sent.\n");
 
     n = recvfrom(sockfd, (char *)buffer, MAXLINE, MSG_WAITALL,
